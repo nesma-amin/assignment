@@ -309,14 +309,7 @@ export default function Dashboard() {
 
            
             <p>Chart view</p>
-
-        {/* <Line
-              className='chart'
-              data= {showAllSchools?(getUniqueSchool().map((school, index) => getNumOfLessons(country_state,school,camp_state))):
-                (getNumOfLessons(country_state,school_state,camp_state))}
-              // data={data2}
-              options={config2}
-            />  */}
+            {/* <ChartDrawer/> */}
              <Line
                data={getNumOfLessons(country_state,school_state,camp_state)}
               // data={data2}
