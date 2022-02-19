@@ -59,20 +59,34 @@ export default function Dashboard() {
       //Chart part
   
     let data2 = {
-      labels: ['January', 'February', 'March', 'April', 'May'],
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','Jun', 'July', 'Aug','sep','oct','Nov','Dec'],
       datasets: [
         {
-          label: 'Rainfall',
+          label: school_state,
           fill: false,
           lineTension: 0.5,
           backgroundColor: 'rgba(75,192,192,1)',
           borderColor: 'rgba(0,0,0,1)',
           borderWidth: 2,
-          data: [65, 59, 80, 81, 56]
+          data: []
         }
       ]
     }
   
+    let noData = {
+      labels: ['January', 'February', 'March', 'April', 'May'],
+      datasets: [
+        {
+          label: 'No Data Selected',
+          fill: false,
+          lineTension: 0.5,
+          backgroundColor: 'rgba(75,192,192,1)',
+          borderColor: 'rgba(0,0,0,1)',
+          borderWidth: 2,
+          data: []
+        }
+      ]
+    }
     let  options = {
       scales: {
         yAxes: [
@@ -147,15 +161,21 @@ export default function Dashboard() {
     return unique_country;
     }
 
-    const getUniqueSchool=()=>{
-      let unique_school= records.map((record)=>{
-        return record.school
-      })
-      let temp_school = new Set(unique_school);
-      unique_school = [...temp_school];
-      console.log("unique school",unique_school)
-      return unique_school;
+    const getUniqueSchool=(data)=>{
+      let unique_school=[]
+      if(data!==[])
+      {
+        console.log("map record in unique school", data)
+         unique_school= data.map((record)=>{
+          return record.school
+        })
+        let temp_school = new Set(unique_school);
+        unique_school = [...temp_school];
+        console.log("unique school",unique_school)
       }
+      return unique_school;
+
+    }
       // const getChartAxisData=()=>{
       //   let unique_school=[]
       //   let school= records.map((record)=>{
@@ -172,20 +192,56 @@ export default function Dashboard() {
           console.log("camp_state",camp_state)
           console.log("school_state",school_state)
           console.log("country_state",country_state)
-          if((i_country === "")  || (i_camp==="") || (i_school===""))
+          let dataToDisplay=[]
+          let filtered_recored =[]
+
+          if((i_country === "")  && (i_camp==="") )
           {
             console.log("empty state")
-            return data2
+            return noData
           }
           
-            const filtered_recored =  records.filter((record) => (
-              ( ( record.camp.includes(i_camp))&&(record.country.includes(i_country))&&(record.school.includes(i_school)))
+            if(showAllSchools) 
+            {
+              filtered_recored= records.filter((record) => (
+              ( ( record.camp.includes(i_camp))&&(record.country.includes(i_country)))
              
-          ))
-          console.log("filtered_recored",filtered_recored)
+               ))
+               console.log("filtered_recored",filtered_recored)
+
+               const matchedSchools= getUniqueSchool(filtered_recored)
+               let orderedResult=[]
+               matchedSchools.forEach(function (mSchool, index) {
+                orderedResult =[...orderedResult,filtered_recored.filter((record)=>(
+                  record.school.includes(mSchool)
+                 ))] 
+                 dataToDisplay.push(fillData(orderedResult[index],mSchool))
+               });
+               let fixDataset= 
+              
+              console.log("matchedSchools",matchedSchools)
+              console.log("orderedResult",orderedResult)
+
+            }
+            else{
+              filtered_recored= records.filter((record) => (
+                ( ( record.camp.includes(i_camp))&&(record.country.includes(i_country))&&(record.school.includes(i_school)))
+               
+                 ))
+                 dataToDisplay.push(fillData(filtered_recored,i_school))
+            }
+            console.log("dataToDisplay",dataToDisplay)
+
+          return dataToDisplay[0];
+          
+        
+      } 
+      const fillData=(filtered_recored,i_school)=>{
+        console.log("filtered_recored",filtered_recored)
+        let filledData=data2
           const lessons=filtered_recored.map((record)=>(record.lessons));
           const months=filtered_recored.map((record)=>(record.month));
-          const lessonDataSet= [
+          const lessonDataSet= 
             {
               label: i_school,
               fill: false,
@@ -195,18 +251,17 @@ export default function Dashboard() {
               borderWidth: 2,
               data: lessons
             }
-          ]
           
-          data2.datasets= [...data2.datasets, lessonDataSet];
+          
+          filledData.datasets = [...filledData.datasets,lessonDataSet] ;
+          // Object.assign({},(filledData.datasets.push(lessonDataSet))) ;
           //labels not correct to be checked how to fix
-          data2.labels=months
+          filledData.labels=[...filledData.labels,months]
           console.log("lessons",lessons)
-          console.log("data2",data2)
+          console.log("filledData",filledData)
+          return filledData
 
-          return data2;
-          
-        
-      } 
+      }
       const handleSetCountry= (e)=>{
         console.log("handle select",e.target.value)
         setCountry(e.target.value)
@@ -233,20 +288,20 @@ export default function Dashboard() {
       {/* <select value={this.props.book.shelf} onChange={this.updateShelf.bind(this)}> */}
       <label>Select Country </label>
       <select  onChange={(e) => handleSetCountry(e)}>
-        { getUniqueCountry().map((country)=>
+        { getUniqueCountry().map((country,key)=>
             <option value={country}>{country}</option>
         )}
       </select>  
       <label>Select Camp </label>
       <select   onChange={(e) =>handleSetCamp(e)}>
-        { getUniqueCamp().map((camp)=>
+        { getUniqueCamp().map((camp, key)=>
             <option value={camp}>{camp}</option>
         )}
       </select> 
       <label>Select School </label>
       <select   onChange={(e) =>handleSetSchool(e)}>
       <option value={"Show_All"}>Show All</option>
-        { getUniqueSchool().map((school)=>
+        { getUniqueSchool(records).map((school,key)=>
             <option value={school}>{school}</option>
         )}
 
@@ -255,17 +310,18 @@ export default function Dashboard() {
            
             <p>Chart view</p>
 
-        <Line
+        {/* <Line
+              className='chart'
               data= {showAllSchools?(getUniqueSchool().map((school, index) => getNumOfLessons(country_state,school,camp_state))):
                 (getNumOfLessons(country_state,school_state,camp_state))}
               // data={data2}
               options={config2}
-            /> 
-            {/* //  <Line
-            //   data={getNumOfLessons(country_state,school_state,camp_state)}
-            //   // data={data2}
-            //   options={config2}
-            // />  */}
+            />  */}
+             <Line
+               data={getNumOfLessons(country_state,school_state,camp_state)}
+              // data={data2}
+              options={config2}
+             /> 
          </div>
     );
 }
