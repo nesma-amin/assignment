@@ -4,7 +4,6 @@ export const SET_SHOW_ALL_SCHOOL = 'SET_SHOW_ALL_SCHOOL'
 export const UNSET_SHOW_ALL_SCHOOL = 'UNSET_SHOW_ALL_SCHOOL'
 
 
-
 export function setSelectedSchool(school){
     return{
         type:SET_SELECTED_SCHOOL,
