@@ -137,13 +137,19 @@ export default function Dashboard() {
           <div>
       {/* <select value={this.props.book.shelf} onChange={this.updateShelf.bind(this)}> */}
       <label>Select Country </label>
-      <select  onChange={(e) => dispatch(setSelectedCountry(e.target.value))}>
+      <select placeholder='Select' onChange={(e) => dispatch(setSelectedCountry(e.target.value))}>
+      {/* <option value="default" disabled hidden>select</option> */}
+      <option value={"Select"} hidden >Select</option>
+
+
         { getUniqueCountry().map((country,key)=>
             <option value={country}>{country}</option>
         )}
       </select>  
       <label>Select Camp </label>
-      <select   onChange={(e) =>dispatch(setSelectedCamp(e.target.value))}>
+      <select  placeholder='select' onChange={(e) =>dispatch(setSelectedCamp(e.target.value))}>
+      <option value={"Select"} hidden >Select</option>
+
         { getUniqueCamp().map((camp, key)=>
             <option value={camp}>{camp}</option>
         )}
@@ -151,7 +157,8 @@ export default function Dashboard() {
       <label>Select School </label>
       {/*TODA: call a middleware to check on selected school value to set all scools in case of show all and dispatsh SET_SHOW_ALL_SCHOOL*/}
       <select   onChange={(e) =>dispatch(setSelectedSchool(e.target.value))}>
-      <option value={"Show_All"} onClick={() => dispatch(setShowAllSchools())}>Show All</option>
+      <option value={"Select"} hidden >Select</option>
+      <option value={"Show_All"} >Show All</option>
         { getUniqueSchool(records).map((school,key)=>
             <option value={school}>{school}</option>
         )}

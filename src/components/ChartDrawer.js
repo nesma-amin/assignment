@@ -72,7 +72,7 @@ const getUniqueSchool=(data)=>{
     {
       console.log("map record in unique school", data)
        unique_school= data.map((record)=>{
-        return record.school
+        return record[1].school
       })
       let temp_school = new Set(unique_school);
       unique_school = [...temp_school];
@@ -81,7 +81,7 @@ const getUniqueSchool=(data)=>{
     return unique_school;
 
   }
-const getNumOfLessons= (i_country, i_school, i_camp,i_records,showAllSchools)=>{
+const getNumOfLessons= (i_country, i_school, i_camp,i_records)=>{
           
     
 
@@ -102,11 +102,10 @@ const getNumOfLessons= (i_country, i_school, i_camp,i_records,showAllSchools)=>{
     console.log("school_state",i_school)
     console.log("country_state",i_country)
     console.log("records",records)
-    console.log("showAllSchools",showAllSchools)
-      if(showAllSchools) 
+      if(i_school[0]==="Show_All") 
       {
         filtered_recored= records.filter((record) => (
-        ( ( record.camp.includes(i_camp))&&(record.country.includes(i_country)))
+        ( ( record[1].camp===(i_camp[0]))&&(record[1].country===(i_country[0])))
        
          ))
          console.log("filtered_recored",filtered_recored)
@@ -114,12 +113,12 @@ const getNumOfLessons= (i_country, i_school, i_camp,i_records,showAllSchools)=>{
          const matchedSchools= getUniqueSchool(filtered_recored)
          let orderedResult=[]
          matchedSchools.forEach(function (mSchool, index) {
+             /*ordere the list per school to represent each school with a chart*/
           orderedResult =[...orderedResult,filtered_recored.filter((record)=>(
-            record.school.includes(mSchool)
+            record[1].school===(mSchool)
            ))] 
-           dataToDisplay.push(fillData(orderedResult[index],mSchool))
+           dataToDisplay.push(fillData(orderedResult[index],mSchool,true))
          });
-         let fixDataset= 
         
         console.log("matchedSchools",matchedSchools)
         console.log("orderedResult",orderedResult)
@@ -151,7 +150,7 @@ const getNumOfLessons= (i_country, i_school, i_camp,i_records,showAllSchools)=>{
            dataToDisplay.push(fillData(filtered_recored,i_school,false))
       }
       console.log("dataToDisplay",dataToDisplay)
-
+      config2.data=dataToDisplay[0].datasets.data
     return dataToDisplay[0];
     
   
@@ -172,17 +171,19 @@ const fillData=(filtered_recored,i_school,showAllSchools)=>{
           data: lessons
         }]
       
-      if(showAllSchools)
+      if(showAllSchools===true)
       {
         filledData.datasets = [...filledData.datasets,lessonDataSet] ;
 
       }
       else{
-        filledData.datasets[0].data = lessons;
+        filledData.datasets[0].data = [...lessons];
+        filledData.datasets[0].label = i_school[0];
       }
       // Object.assign({},(filledData.datasets.push(lessonDataSet))) ;
       //labels not correct to be checked how to fix
-      filledData.labels=[...filledData.labels,months]
+    //   filledData.labels=[...filledData.labels,months]
+    filledData.labels=[...months]
       console.log("lessons",lessons)
       console.log("filledData",filledData)
       return filledData
@@ -208,7 +209,7 @@ export default function ChartDrawer() {
           <p>Chart view</p>
             {/* <ChartDrawer/> */}
              <Line
-               data={getNumOfLessons(country,school,camp,records,showAllSchools)}
+               data={getNumOfLessons(country,school,camp,records)}
               // data={data2}
               options={config2}
              /> 

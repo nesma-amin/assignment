@@ -7,7 +7,7 @@ export default function school(state=null, action){
             return true
             case UNSET_SHOW_ALL_SCHOOL:
 
-            return false
+            return null
                 
         default:
             return state

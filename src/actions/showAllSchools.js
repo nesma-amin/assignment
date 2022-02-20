@@ -6,6 +6,7 @@ export function setShowAllSchools(){
     return{
         type:SET_SHOW_ALL_SCHOOL,
         
+        
     }
 }
 
