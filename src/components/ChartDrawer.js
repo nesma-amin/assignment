@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import {Line} from 'react-chartjs-2';
 import { useSelector, useDispatch } from 'react-redux'
 import React, { useState, useEffect } from 'react';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,7 +14,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import school from '../reducer/school';
 
 let data2 = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','Jun', 'July', 'Aug','sep','oct','Nov','Dec'],
@@ -31,7 +31,7 @@ let data2 = {
   }
   const config2 = {
     type: 'line',
-    data: data2,
+    data:data2,
     options: {
       responsive: true,
       events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
@@ -81,7 +81,7 @@ const getUniqueSchool=(data)=>{
     return unique_school;
 
   }
-const getNumOfLessons= (i_country, i_school, i_camp,records,showAllSchools)=>{
+const getNumOfLessons= (i_country, i_school, i_camp,i_records,showAllSchools)=>{
           
     
 
@@ -90,8 +90,9 @@ const getNumOfLessons= (i_country, i_school, i_camp,records,showAllSchools)=>{
     console.log("camp_state",i_camp)
     console.log("school_state",i_school)
     console.log("country_state",i_country)
+    const records= Object.entries(i_records)
     // if((i_country === ("" || "undefined"))  || (i_camp===("" || "undefined")) )
-    if((i_country === undefined)  || (i_camp=== null) || (i_school === undefined))
+    if((i_country === null)  || (i_camp=== null) || (i_school === null))
 
     {
       console.log("empty state")
@@ -124,16 +125,30 @@ const getNumOfLessons= (i_country, i_school, i_camp,records,showAllSchools)=>{
         console.log("orderedResult",orderedResult)
 
       }
-      else if(school==="")
-      {
+    //   else if(i_school==="")
+    //   {
 
-      }
+    //   }
       else{
-        filtered_recored= records.filter((record) => (
-          ( ( record.camp.includes(i_camp))&&(record.country.includes(i_country))&&(record.school.includes(i_school)))
-         
-           ))
-           dataToDisplay.push(fillData(filtered_recored,i_school))
+          console.log("recordsss",records)
+
+        filtered_recored= records.filter((record) => {
+        //     console.log("record[1].camp",record[1].camp)
+        //     console.log("i_camp",i_camp[0])
+        //     console.log("( record[1].camp.includes(i_camp))",( record[1].camp==(i_camp[0])))
+           return ( ( (record[1].camp)===i_camp[0])&&((record[1].country)===(i_country[0]))
+            &&((record[1].school)===(i_school[0])))
+
+        //   ( ( record[1].camp.includes(i_camp[0]))&&(record[1].country.includes(i_country[0]))
+        //   &&(record[1].school.includes(i_school[0])))
+         console.log("( record[1].camp.includes(i_camp))",( record[1].camp.includes(i_camp)))
+         console.log("record[1].camp",record[1].camp)
+         console.log("i_camp",i_camp)
+        })
+        
+        console.log("filtered_recored",filtered_recored)
+
+           dataToDisplay.push(fillData(filtered_recored,i_school,false))
       }
       console.log("dataToDisplay",dataToDisplay)
 
@@ -141,39 +156,45 @@ const getNumOfLessons= (i_country, i_school, i_camp,records,showAllSchools)=>{
     
   
 } 
-const fillData=(filtered_recored,i_school)=>{
-  console.log("filtered_recored",filtered_recored)
-  let filledData=data2
-    const lessons=filtered_recored.map((record)=>(record.lessons));
-    const months=filtered_recored.map((record)=>(record.month));
-    const lessonDataSet= 
+const fillData=(filtered_recored,i_school,showAllSchools)=>{
+    console.log("filtered_recored",filtered_recored)
+    let filledData=data2
+      const lessons=filtered_recored.map((record)=>(record[1].lessons));
+      const months=filtered_recored.map((record)=>(record[1].month));
+      const lessonDataSet= 
+        [{
+          label: i_school,
+          fill: false,
+          lineTension: 0.5,
+          backgroundColor: 'rgba(75,192,192,1)',
+          borderColor: 'rgba(0,0,0,1)',
+          borderWidth: 2,
+          data: lessons
+        }]
+      
+      if(showAllSchools)
       {
-        label: i_school,
-        fill: false,
-        lineTension: 0.5,
-        backgroundColor: 'rgba(75,192,192,1)',
-        borderColor: 'rgba(0,0,0,1)',
-        borderWidth: 2,
-        data: lessons
-      }
-    
-    
-    filledData.datasets = [...filledData.datasets,lessonDataSet] ;
-    // Object.assign({},(filledData.datasets.push(lessonDataSet))) ;
-    //labels not correct to be checked how to fix
-    filledData.labels=[...filledData.labels,months]
-    console.log("lessons",lessons)
-    console.log("filledData",filledData)
-    return filledData
+        filledData.datasets = [...filledData.datasets,lessonDataSet] ;
 
-}
+      }
+      else{
+        filledData.datasets[0].data = lessons;
+      }
+      // Object.assign({},(filledData.datasets.push(lessonDataSet))) ;
+      //labels not correct to be checked how to fix
+      filledData.labels=[...filledData.labels,months]
+      console.log("lessons",lessons)
+      console.log("filledData",filledData)
+      return filledData
+  
+  }
 export default function ChartDrawer() {
     const { camp, country, school,records,showAllSchools } = useSelector(state => ({
         camp: state.camp,
         country: state.country,
         school: state.school,
         records: state.records,
-        school: state.showAllSchools
+        showAllSchools: state.showAllSchools
     }))
     console.log("camp",camp)
     console.log("school",school)

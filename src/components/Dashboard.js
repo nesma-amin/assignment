@@ -2,7 +2,9 @@
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {Line} from 'react-chartjs-2';
-import {setSelectedSchool,setShowAllSchools} from '../actions/school'
+import {setSelectedSchool} from '../actions/school'
+import {setShowAllSchools} from '../actions/showAllSchools'
+
 import {setSelectedCamp} from '../actions/camp'
 import {setSelectedCountry} from '../actions/country'
 
@@ -167,11 +169,3 @@ export default function Dashboard() {
          </div>
     );
 }
-
-// function mapStateToProps( {authedUser} ){
-//     return { 
-//       // authedUser:authedUser?authedUser[0]:null
-//     };
-//   }
-// export default withRouter(connect(mapStateToProps)(Dashboard))
-// export default (Dashboard)
