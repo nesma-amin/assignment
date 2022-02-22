@@ -257,23 +257,15 @@ export default function ChartDrawer() {
 
    
     const handleClick=((dataIndex,datasetIndex)=>{
-    // history.push(event.target.value)
-    console.log("datasetIndex",datasetIndex)
 
     if(chartData!=[]){
-      const clickedData= chartData.datasets[datasetIndex].data[dataIndex]
-      console.log("dataIndex",dataIndex)
-      console.log("datasetIndex",datasetIndex)
-      console.log("clickedData",clickedData)
-      const schoolLabel = chartData.datasets[datasetIndex].label;
-      console.log("schoolLabel",schoolLabel)
-  
-      const position = schoolLabel[0].search("in");
-      const schoolName = schoolLabel[0].slice(position+3)
-      console.log("schoolName",schoolName)
-      dispatch(setSelectedChartLessons(clickedData))
-      dispatch(setSelectedChartSchool(schoolName))
-      history.push('/chartDetails')
+      const lessonsNum= chartData.datasets[datasetIndex].data[dataIndex]
+      /*Extract school name from label to handle show all schools case*/
+      const schoolLabel = chartData.datasets[datasetIndex].label;  
+      const position = schoolLabel.search("in");
+      const schoolName = schoolLabel.slice(position+3)
+      /*Redirect to ChartDetail component*/
+      history.push(`/chartDetails/${lessonsNum}/${schoolName}`)
     }
     
 
@@ -282,7 +274,6 @@ export default function ChartDrawer() {
     return (
         <div style={{height:"450px", width:"700px" }}>
           <p>Chart view</p>
-            {/* <ChartDrawer/> */}
             <Line 
             data={chartData}
             // options={config}

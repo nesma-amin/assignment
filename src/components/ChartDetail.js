@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 
 
 
 
 export default function ChartDetail() {
-    // const [ selectedSchool, setSelectedSchool ] = useState([]);
-    // const schools=["sc1", "sc2", "sc3","sc4"]
-    // const lessonsNum=[20,10,15,30]
-    // const totalLessons =75
-    // const camp="Camp"
-    const { camp, country, school,chart } = useSelector(state => ({
+    const { camp, country } = useSelector(state => ({
       camp: state.camp,
       country: state.country,
-      school: state.school,
-      chart: state.chart,
   }))
-
-    console.log("chart",chart)
+const {schoolName} = useParams()
+const { lessonsNum } = useParams();
+    console.log("lessonsNum",lessonsNum)
   return (
     <div className='camp' >
       <table id="entry_data" style={{border:"solid", width:"200px"}}>
@@ -43,7 +38,7 @@ export default function ChartDetail() {
                       <label>School Name:</label>
                   </td>
                   <td>
-                  <label>{school[0]}</label>
+                  <label>{schoolName}</label>
                   </td>
               </tr>
               <tr>
@@ -51,7 +46,7 @@ export default function ChartDetail() {
                       <label>Num of Lessons:</label>
                   </td>
                   <td>
-                  <label>{chart.chartLessons}</label>
+                  <label>{lessonsNum}</label>
                   </td>
               </tr>
           </tbody>

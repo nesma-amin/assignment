@@ -62,7 +62,7 @@ export default function App () {
                     
           <Fragment> 
           <Route path='/' exact component={Dashboard} />
-          <Route path='/chartDetails' component={ChartDetail} />
+          <Route exact path='/chartDetails/:lessonsNum/:schoolName' component={ChartDetail} />
           {/* <Route path='/chartDetails' component={()=> <ChartDetail record={}/>} /> */}
 
             </Fragment>
