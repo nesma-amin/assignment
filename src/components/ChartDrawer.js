@@ -48,10 +48,8 @@ const getNumOfLessons= (i_country, i_school, i_camp,records)=>{
           
     
 
-    let dataToDisplay= []
-    dataToDisplay.forEach((element,index) => {
-      dataToDisplay.splice(index, 1);
-    });
+    let dataToDisplay= noData
+    
     //   dataToDisplay.splice(index, 1);
     //   dataToDisplay.pop(); 
     // }
@@ -75,15 +73,14 @@ const getNumOfLessons= (i_country, i_school, i_camp,records)=>{
      
     if(i_school[0]==="Show_All") 
     {
-
-      //clear data to display
-      while (dataToDisplay.length) { 
-        dataToDisplay.pop(); 
-      }
       filtered_recored= records[0].filter((record) => (
       ( ( record.camp===(i_camp[0]))&&(record.country===(i_country[0])))
      
        ))
+       if(filtered_recored===[])
+       {
+         return noData
+       }
        console.log("filtered_recored",filtered_recored)
 
        const matchedSchools= getUniqueSchool(filtered_recored)
@@ -98,7 +95,10 @@ const getNumOfLessons= (i_country, i_school, i_camp,records)=>{
 
          console.log("orderedResult[index]",orderedResult[index])
           /*Fill the dataset array for each school entry*/
-         dataToDisplay.push(fillData(orderedResult[index],mSchool,false,index))
+          const receivedData=(fillData(orderedResult[index],mSchool,false,index))
+          console.log("receivedData",receivedData)
+          dataToDisplay.datasets[index]=(receivedData.datasets[0]);
+        //  dataToDisplay.push(fillData(orderedResult[index],mSchool,false,index))
         //  dataToDisplay=dataToDisplay_temp[0]
        });
 
@@ -117,12 +117,12 @@ const getNumOfLessons= (i_country, i_school, i_camp,records)=>{
            return ( ( (record.camp)===i_camp[0])&&((record.country)===(i_country[0]))
             &&((record.school)===(i_school[0])))
         })
-        
-        console.log("filtered_recored",filtered_recored)
-        if(filtered_recored.length===0)
+        if(filtered_recored===[])
         {
-          return noData;
+          return noData
         }
+        console.log("filtered_recored",filtered_recored)
+
         // dataToDisplay.push(fillData(filtered_recored,i_school[0],false,0))
         dataToDisplay=(fillData(filtered_recored,i_school[0],false,0))
       }
@@ -261,10 +261,10 @@ export default function ChartDrawer() {
               responsive: true,
               tension:1,
               events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-              // legend:{
-              //   position: 'right'
-              //  },
-              
+              legend:{
+                position: 'right'
+               },
+               position: 'right',
                 title: {
                   display: true,
                   text: 'Line Chart'
