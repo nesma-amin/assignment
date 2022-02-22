@@ -6,18 +6,27 @@ import { withRouter } from 'react-router-dom'
 
 
 export default function Nav() {
+  const language=""
+  const handleSetLanguage=(()=>{
 
+  })
   return (
     <nav className='nav'>
-      <ul>
+      <ul style={{display:"flex", position:"relative", padding: "10px"}}>
         <li>
-          <NavLink to='/' exact activeClassName='active'>
-            Home
-          </NavLink>
+        <select
+          className="custom-select"
+          value={language}
+          onChange={e => handleSetLanguage(e.target.value)}
+        >
+          <option value="English">English</option>
+          <option value="Malayalam">Arabic</option>
+        </select>
+
         </li>
-        <li>
+        <li style={{display:"flex", position:"right", padding: "10px"}}>
           <NavLink to='/' exact activeClassName='active'>
-            Home
+          change them
           </NavLink>
         </li>
       </ul>

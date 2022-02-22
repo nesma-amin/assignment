@@ -1,10 +1,4 @@
-
-import {connect} from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import {Line} from 'react-chartjs-2';
 import {setSelectedSchool} from '../actions/school'
-import {setShowAllSchools} from '../actions/showAllSchools'
-
 import {setSelectedCamp} from '../actions/camp'
 import {setSelectedCountry} from '../actions/country'
 

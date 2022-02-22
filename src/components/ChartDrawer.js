@@ -1,23 +1,8 @@
-import {connect} from 'react-redux'
-import { withRouter } from 'react-router-dom'
 import {Line} from 'react-chartjs-2';
 import { useSelector, useDispatch } from 'react-redux'
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import ChartDetail from './ChartDetail';
-import { setSelectedChartLessons, setSelectedChartPoint, setSelectedChartSchool } from '../actions/chart';
 
 let noData = {
   labels: ['January', 'February', 'March', 'April', 'May'],
@@ -30,38 +15,12 @@ let noData = {
       borderColor: 'rgba(0,0,0,1)',
       borderWidth: 2,
       data: [],
-      showLine: true
+      showLine: true,
+      tension:0,
     }
   ]
 }
-  let config = {
-    type: 'line',
-    
-    options: {
-      responsive: true,
-      events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-      legend:{
-        position: 'right'
-       },
-      
-      plugins: [{
-        
-        id: 'myEventCatcher',
-        beforeEvent(chart, args, pluginOptions) {
-          const event = args.event;
-          if (event.type === ('mouseout'|| 'mousemove')) {
-            // process the event
-          }
-        }
-      }],
-     
-        title: {
-          display: true,
-          text: 'Chart.js Line Chart'
-        }
-      }
-    
-  };
+  
 
  
 //   const config = {
@@ -90,9 +49,12 @@ const getNumOfLessons= (i_country, i_school, i_camp,records)=>{
     
 
     let dataToDisplay= []
-    while (dataToDisplay.length) { 
-      dataToDisplay.pop(); 
-    }
+    dataToDisplay.forEach((element,index) => {
+      dataToDisplay.splice(index, 1);
+    });
+    //   dataToDisplay.splice(index, 1);
+    //   dataToDisplay.pop(); 
+    // }
     console.log("############### dataToDisplay in the beginning",dataToDisplay)
     let filtered_recored =[]
     console.log("camp_state",i_camp)
@@ -174,26 +136,33 @@ const getNumOfLessons= (i_country, i_school, i_camp,records)=>{
 } 
 const fillData=(filtered_recored,i_school,clear, loop)=>{
     console.log("filtered_recored",filtered_recored)
-    let filledData=noData
-    while (filledData.length) { 
-      filledData.pop(); 
-    }
+    let filledData=[noData]
+    filledData.forEach((element,index) => {
+      filledData.splice(index, 1);
+    });
+    filledData.push(noData)
       const lessons=filtered_recored.map((record)=>(record.lessons));
       const months=filtered_recored.map((record)=>(record.month));
       let totalLessons=0
       lessons.forEach(function (lesson, index) {
         totalLessons += lesson;
       })
-      const lessonDataSet= 
-        {
-          label: `${totalLessons} lessons in ${i_school}`,
-          fill: false,
-          lineTension: 0.5,
-          backgroundColor: 'rgba(75,192,192,1)',
-          borderColor: 'rgba(0,0,0,1)',
-          borderWidth: 2,
-          data: lessons
-        }
+      const lessonDataSet= {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","sep","Nov","Dec"],
+        datasets: [
+          {
+            data: lessons,
+            label: `${totalLessons} lessons in ${i_school}`,
+            borderColor: "#3333ff",
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(75,192,192,1)',
+            borderColor: 'rgba(0,0,0,1)',
+            borderWidth: 2,
+          }
+        ]
+    };
+  
       
       console.log("totalLessons",totalLessons)
       if (clear===true)
@@ -209,7 +178,9 @@ const fillData=(filtered_recored,i_school,clear, loop)=>{
 
       // }
       // else{
-        filledData.datasets[loop] = lessonDataSet;
+        filledData=lessonDataSet ;
+        filledData.labels=months
+        // filledData.datasets[loop] = lessonDataSet;
        // filledData.datasets[loop].label = `${totalLessons} lessons in ${i_school}`;
       // }
       // Object.assign({},(filledData.datasets.push(lessonDataSet))) ;
@@ -232,7 +203,8 @@ export default function ChartDrawer() {
         chart: state.chart
     }))
     const history = useHistory()
-    let chartData=getNumOfLessons(country,school,camp,records)
+    let chartData = getNumOfLessons(country,school,camp,records)
+    // chartData.push(getNumOfLessons(country,school,camp,records))
     console.log("camp",camp)
     console.log("school",school)
     console.log("country",country)
