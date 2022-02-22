@@ -5,9 +5,7 @@ import { withRouter } from 'react-router-dom'
 
 
 
-class Nav extends Component {
-  render(){
-    const { authedUser } = this.props;
+export default function Nav() {
 
   return (
     <nav className='nav'>
@@ -26,11 +24,4 @@ class Nav extends Component {
     </nav>
   )
 } 
-}
-function mapStateToProps( {authedUser} ){
-  return { 
-    // authedUser:authedUser?authedUser[0]:null
-  };
-}
-// export default withRouter(connect(mapStateToProps)(Nav))
-export default (Nav)
+

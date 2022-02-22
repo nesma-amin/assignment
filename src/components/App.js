@@ -12,6 +12,8 @@ import { withRouter } from 'react-router-dom'
 
 import Dashboard from './Dashboard'
 import {handleInitialData} from '../actions/shared'
+import ChartDetail from './ChartDetail';
+import LoadingBar from 'react-redux-loading-bar'
 
 
 
@@ -31,6 +33,14 @@ export default function App () {
          }
       }
       )
+      // fetch('http://localhost:8080/https://raw.githubusercontent.com/abdelrhman-arnos/analysis-fe-challenge/master/data.json'
+      // ,{
+      //   headers : { 
+      //     'Content-Type': 'application/json',
+      //     'Accept': 'application/json'
+      //    }
+      // }
+      // )
         .then(function(response){
           console.log(response)
           return response.json();
@@ -46,21 +56,18 @@ export default function App () {
 
     return (
          <Router>
-          
-          <div className='container'> 
-
-              <Nav />  
-              <Switch>  
+         <LoadingBar />
+          <Nav />  
+          <Switch>  
                     
+          <Fragment> 
+          <Route path='/' exact component={Dashboard} />
+          <Route path='/chartDetails' component={ChartDetail} />
+          {/* <Route path='/chartDetails' component={()=> <ChartDetail record={}/>} /> */}
 
-                      <Fragment> 
-                      <Route path='/' exact component={Dashboard} />
-       
-                      {/* <Route path='/question/:id' component={QuestionPage} /> */}
-                       </Fragment>
+            </Fragment>
                 
-                </Switch> 
-          </div>           
+          </Switch> 
       </Router>   
    
     )
@@ -73,4 +80,3 @@ function mapStateToProps( {authedUser} ){
   };
 }
 // export default connect(mapStateToProps)(App)
-

@@ -4,6 +4,8 @@ import country from './country'
 import school from './school'
 import records from './records'
 import showAllSchools from './showAllSchools'
+import { loadingBarReducer } from 'react-redux-loading-bar'
+
 
 // import { loadingBarReducer } from 'react-redux-loading'
 
@@ -12,6 +14,6 @@ export default combineReducers({
     country,
     school,
     records,
-    showAllSchools
-  // loadingBar: loadingBarReducer,
+    showAllSchools,
+  loadingBar: loadingBarReducer,
 })

@@ -143,7 +143,7 @@ export default function Dashboard() {
 
 
         { getUniqueCountry().map((country,key)=>
-            <option value={country}>{country}</option>
+            <option key= {key}  value={country}>{country}</option>
         )}
       </select>  
       <label>Select Camp </label>
@@ -151,7 +151,7 @@ export default function Dashboard() {
       <option value={"Select"} hidden >Select</option>
 
         { getUniqueCamp().map((camp, key)=>
-            <option value={camp}>{camp}</option>
+            <option key= {key} value={camp}>{camp}</option>
         )}
       </select> 
       <label>Select School </label>
@@ -160,14 +160,14 @@ export default function Dashboard() {
       <option value={"Select"} hidden >Select</option>
       <option value={"Show_All"} >Show All</option>
         { getUniqueSchool(records).map((school,key)=>
-            <option value={school}>{school}</option>
+            <option key= {key} value={school}>{school}</option>
         )}
 
       </select>  
 
            
-            <p>Chart view</p>
-            <ChartDrawer/>
+            <ChartDrawer />
+            {/* <CampInfo className='camp' style={{ display:"flex" }}/> */}
              {/* <Line
                data={getNumOfLessons(country_state,school_state,camp_state)}
               // data={data2}
