@@ -3,17 +3,16 @@ import camp from './camp'
 import country from './country'
 import school from './school'
 import records from './records'
-import showAllSchools from './showAllSchools'
+import chart from './chart'
 import { loadingBarReducer } from 'react-redux-loading-bar'
 
 
-// import { loadingBarReducer } from 'react-redux-loading'
 
 export default combineReducers({
     camp,
     country,
     school,
     records,
-    showAllSchools,
+    chart,
   loadingBar: loadingBarReducer,
 })

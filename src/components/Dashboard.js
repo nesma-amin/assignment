@@ -41,25 +41,25 @@ export default function Dashboard() {
     const [ test, setTest ] = useState(false);
 
     const dispatch = useDispatch();
-    const { camp, country, school,i_records,showAllSchools } = useSelector(state => ({
+    const { camp, country, school,records,showAllSchools } = useSelector(state => ({
       camp: state.camp,
       cointry: state.country,
       school: state.school,
-      i_records: state.records,
+      records: state.records,
       school: state.showAllSchools
   }))
   console.log("camp_state",camp)
     console.log("school_state",school)
     console.log("country_state",country)
-    console.log("i_records",i_records)
+    console.log("i_records",records)
     console.log("showAllSchools",showAllSchools)
-  const records=Object.entries(i_records)  
+  // const records=Object.entries(i_records)  
   const getUniqueCamp=()=>{
     let unique_camp=[]
     if((records.hasOwnProperty(0)===true))
     {
-   unique_camp= records.map((record)=>{
-    return record[1].camp
+   unique_camp= records[0].map((record)=>{
+    return record.camp
   })
   let temp_camp = new Set(unique_camp);
   unique_camp = [...temp_camp];
@@ -74,39 +74,32 @@ export default function Dashboard() {
 
     {
 
-     unique_country= records.map((record)=>{
-      return record[1].country
+     unique_country= records[0].map((record)=>{
+      return record.country
     })
     let temp_country = new Set(unique_country);
     unique_country = [...temp_country];
     console.log("unique country",unique_country)
   }
-  if(test===false)
-  {
-    setTest(true)
-
-  }
  
     return unique_country;
     }
 
-    const getUniqueSchool=(data)=>{
+    const getUniqueSchool=()=>{
       let unique_school=[]
       if((records.hasOwnProperty(0)===true))
       {
-      if(data!==[])
-      {
-        console.log("map record in unique school", data)
-         unique_school= data.map((record,index)=>{
-          // console.log("record.school",record)
+        console.log("map record in unique school", records)
+         unique_school= records[0].map((record,index)=>{
+          // console.log("record.school",record.school)
 
-          return record[1].school
+          return record.school
         })
         let temp_school = new Set(unique_school);
         unique_school = [...temp_school];
         console.log("unique school",unique_school)
       }
-    }
+    
       return unique_school;
 
     }
@@ -159,7 +152,7 @@ export default function Dashboard() {
       <select   onChange={(e) =>dispatch(setSelectedSchool(e.target.value))}>
       <option value={"Select"} hidden >Select</option>
       <option value={"Show_All"} >Show All</option>
-        { getUniqueSchool(records).map((school,key)=>
+        { getUniqueSchool().map((school,key)=>
             <option key= {key} value={school}>{school}</option>
         )}
 

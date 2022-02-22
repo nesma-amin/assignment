@@ -17,63 +17,66 @@ import {
   Legend,
 } from 'chart.js';
 import ChartDetail from './ChartDetail';
+import { setSelectedChartLessons, setSelectedChartPoint, setSelectedChartSchool } from '../actions/chart';
+
+let noData = {
+  labels: ['January', 'February', 'March', 'April', 'May'],
+  datasets: [
+    {
+      label: 'No Data Selected',
+      fill: false,
+      lineTension: 0.5,
+      backgroundColor: 'rgba(75,192,192,1)',
+      borderColor: 'rgba(0,0,0,1)',
+      borderWidth: 2,
+      data: [],
+      showLine: true
+    }
+  ]
+}
+  let config = {
+    type: 'line',
+    
+    options: {
+      responsive: true,
+      events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+      legend:{
+        position: 'right'
+       },
+      
+      plugins: [{
+        
+        id: 'myEventCatcher',
+        beforeEvent(chart, args, pluginOptions) {
+          const event = args.event;
+          if (event.type === ('mouseout'|| 'mousemove')) {
+            // process the event
+          }
+        }
+      }],
+     
+        title: {
+          display: true,
+          text: 'Chart.js Line Chart'
+        }
+      }
+    
+  };
 
  
-  // const config3 = {
-  //   type: 'line',
-  //   data:data2,
-  //   options: {
-  //     responsive: true,
-  //     events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-  //     legend:{
-  //       position: 'right'
-  //      },
-      // plugins: [{
-        
-      //   id: 'myEventCatcher',
-      //   beforeEvent(chart, args, pluginOptions) {
-      //     const event = args.event;
-      //     if (event.type === ('mouseout'|| 'mousemove')) {
-      //       // process the event
-      //     }
-      //   }
-      // }],
-     
-  //       title: {
-  //         display: true,
-  //         text: 'Chart.js Line Chart'
-  //       }
-  //     }
-    
-  // };
-
-  let noData = {
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    datasets: [
-      {
-        label: 'No Data Selected',
-        fill: false,
-        lineTension: 0.5,
-        backgroundColor: 'rgba(75,192,192,1)',
-        borderColor: 'rgba(0,0,0,1)',
-        borderWidth: 2,
-        data: []
-      }
-    ]
-  }
-  const config = {
-    legend:{
-      display:true,
-     position: "right"
-    }
-}
+//   const config = {
+//     legend:{
+//       display:true,
+//      position: "right"
+//     }
+// }
 const getUniqueSchool=(data)=>{
     let unique_school=[]
     if(data!==[])
     {
       console.log("map record in unique school", data)
        unique_school= data.map((record)=>{
-        return record[1].school
+        return record.school
       })
       let temp_school = new Set(unique_school);
       unique_school = [...temp_school];
@@ -82,16 +85,20 @@ const getUniqueSchool=(data)=>{
     return unique_school;
 
   }
-const getNumOfLessons= (i_country, i_school, i_camp,i_records)=>{
+const getNumOfLessons= (i_country, i_school, i_camp,records)=>{
           
     
 
     let dataToDisplay= []
+    while (dataToDisplay.length) { 
+      dataToDisplay.pop(); 
+    }
+    console.log("############### dataToDisplay in the beginning",dataToDisplay)
     let filtered_recored =[]
     console.log("camp_state",i_camp)
     console.log("school_state",i_school)
     console.log("country_state",i_country)
-    const records= Object.entries(i_records)
+    // const records= Object.entries(i_records)
     // if((i_country === ("" || "undefined"))  || (i_camp===("" || "undefined")) )
     if((i_country === null)  || (i_camp=== null) || (i_school === null))
 
@@ -106,28 +113,31 @@ const getNumOfLessons= (i_country, i_school, i_camp,i_records)=>{
      
     if(i_school[0]==="Show_All") 
     {
+
       //clear data to display
       while (dataToDisplay.length) { 
         dataToDisplay.pop(); 
-    }
-      filtered_recored= records.filter((record) => (
-      ( ( record[1].camp===(i_camp[0]))&&(record[1].country===(i_country[0])))
+      }
+      filtered_recored= records[0].filter((record) => (
+      ( ( record.camp===(i_camp[0]))&&(record.country===(i_country[0])))
      
        ))
        console.log("filtered_recored",filtered_recored)
 
        const matchedSchools= getUniqueSchool(filtered_recored)
        let orderedResult=[]
+      //  let dataToDisplay_temp=[]
        matchedSchools.forEach(function (mSchool, index) {
            /*ordere the list per school to represent each school with a chart*/
         orderedResult =[...orderedResult,filtered_recored.filter((record)=>(
-          record[1].school===(mSchool)
+          record.school===(mSchool)
          ))] 
          console.log("index",index)
 
          console.log("orderedResult[index]",orderedResult[index])
-
+          /*Fill the dataset array for each school entry*/
          dataToDisplay.push(fillData(orderedResult[index],mSchool,false,index))
+        //  dataToDisplay=dataToDisplay_temp[0]
        });
 
       console.log("matchedSchools",matchedSchools)
@@ -140,28 +150,36 @@ const getNumOfLessons= (i_country, i_school, i_camp,i_records)=>{
           dataToDisplay=[]
         console.log("dataToDisplay after clear",dataToDisplay)
 
-        filtered_recored= records.filter((record) => {
+        filtered_recored= records[0].filter((record) => {
         
-           return ( ( (record[1].camp)===i_camp[0])&&((record[1].country)===(i_country[0]))
-            &&((record[1].school)===(i_school[0])))
+           return ( ( (record.camp)===i_camp[0])&&((record.country)===(i_country[0]))
+            &&((record.school)===(i_school[0])))
         })
         
         console.log("filtered_recored",filtered_recored)
-
-        dataToDisplay.push(fillData(filtered_recored,i_school[0],false,0))
+        if(filtered_recored.length===0)
+        {
+          return noData;
+        }
+        // dataToDisplay.push(fillData(filtered_recored,i_school[0],false,0))
+        dataToDisplay=(fillData(filtered_recored,i_school[0],false,0))
       }
       // fillData(filtered_recored,i_school,false,true)
       console.log("dataToDisplay",dataToDisplay)
-      config.data=dataToDisplay
-    return dataToDisplay[0];
+      
+      // config.data=dataToDisplay.datasets[0].data
+    return dataToDisplay;
     
   
 } 
 const fillData=(filtered_recored,i_school,clear, loop)=>{
     console.log("filtered_recored",filtered_recored)
     let filledData=noData
-      const lessons=filtered_recored.map((record)=>(record[1].lessons));
-      const months=filtered_recored.map((record)=>(record[1].month));
+    while (filledData.length) { 
+      filledData.pop(); 
+    }
+      const lessons=filtered_recored.map((record)=>(record.lessons));
+      const months=filtered_recored.map((record)=>(record.month));
       let totalLessons=0
       lessons.forEach(function (lesson, index) {
         totalLessons += lesson;
@@ -205,70 +223,91 @@ const fillData=(filtered_recored,i_school,clear, loop)=>{
   
   }
 export default function ChartDrawer() {
-    const { camp, country, school,records,showAllSchools } = useSelector(state => ({
+  // const [ chartDataState, setChartData ] = useState(false);
+    const { camp, country, school,records,chart } = useSelector(state => ({
         camp: state.camp,
         country: state.country,
         school: state.school,
         records: state.records,
-        showAllSchools: state.showAllSchools
+        chart: state.chart
     }))
+    const history = useHistory()
+    let chartData=getNumOfLessons(country,school,camp,records)
     console.log("camp",camp)
     console.log("school",school)
     console.log("country",country)
     console.log("record",records)
 
     const dispatch = useDispatch()
-    let chartData=getNumOfLessons(country,school,camp,records)
-    const history = useHistory()
-    const handleClick = (event) => {
+    // useEffect(()=>{
+    //  const result=getNumOfLessons(country,school,camp,records)
+    //  console.log("***********result",result)
+    //  if(result)
+    //  {
+    //    console.log("inside state set")
+    //   chartData=result[0]
+    //   setChartData(result)
+    //           console.log("chartDataState",chartDataState)
+    
+    //  }
+     
+    // },[country,camp,school])
+    
+    console.log("chartData",chartData)
+
+   
+    const handleClick=((dataIndex,datasetIndex)=>{
     // history.push(event.target.value)
-    history.push('/chartDetails')
+    console.log("datasetIndex",datasetIndex)
 
-  }
-    // const handleClick=((dataIndex,datasetIndex)=>{
-    //   const clickedData= chartData.datasets[datasetIndex].data[dataIndex]
-    //   console.log("clickedData",clickedData)
-      
-    //   return <ChartDetail />
+    if(chartData!=[]){
+      const clickedData= chartData.datasets[datasetIndex].data[dataIndex]
+      console.log("dataIndex",dataIndex)
+      console.log("datasetIndex",datasetIndex)
+      console.log("clickedData",clickedData)
+      const schoolLabel = chartData.datasets[datasetIndex].label;
+      console.log("schoolLabel",schoolLabel)
+  
+      const position = schoolLabel[0].search("in");
+      const schoolName = schoolLabel[0].slice(position+3)
+      console.log("schoolName",schoolName)
+      dispatch(setSelectedChartLessons(clickedData))
+      dispatch(setSelectedChartSchool(schoolName))
+      history.push('/chartDetails')
+    }
+    
 
-    // })
+  })
+  
     return (
         <div style={{height:"450px", width:"700px" }}>
           <p>Chart view</p>
             {/* <ChartDrawer/> */}
             <Line 
-            data={chartData} 
-            onElementsClick={elem => {
-              let data = chartData.datasets[elem[0]._datasetIndex].data;
-              console.log("Cases", data[elem[0]._index]);
-          
-              data = chartData.datasets[elem[1]._datasetIndex].data;
-              console.log("Recovered", data[elem[1]._index]);
-          
-              data = chartData.datasets[elem[2]._datasetIndex].data;
-              console.log("Deaths", data[elem[2]._index]);
-            }}
+            data={chartData}
+            // options={config}
             options={{
+              type: 'line',
               onClick: (e, element) => {
                 if (element.length > 0) {
                   console.log("element",element)
                   let ind = element[0].index;
-                  // data.datasets[0].data.splice(ind, 1);
-                  // data.labels.splice(ind, 1);
-                  handleClick(element[0].index,element[0].datasetIndex);
-                  history.push('/chartDetails')
+                  handleClick(ind,element[0].datasetIndex);
                 }
               },
-              title: {
-                display: true,
-                text: "Camp schools lessons",
-                fontSize: 20
-              },
-              legend: {
-                display: true, //Is the legend shown?
-                position: "lift" //Position of the legend.
-              }
-            }} />
+              responsive: true,
+              tension:1,
+              events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+              // legend:{
+              //   position: 'right'
+              //  },
+              
+                title: {
+                  display: true,
+                  text: 'Line Chart'
+                }
+              }} 
+            />
         </div>
       );
 
