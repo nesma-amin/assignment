@@ -36,7 +36,8 @@ export default function Dashboard() {
   };
   const getUniqueCountry=()=>{
     let unique_country=[];
-    if((records.hasOwnProperty(0)===true))
+    
+    if(((Object.prototype.hasOwnProperty.call(records, 0))===true))
     {
 
       unique_country= records[0].map((record)=>{
@@ -51,7 +52,7 @@ export default function Dashboard() {
 
   const getUniqueSchool=()=>{
     let unique_school=[];
-    if((records.hasOwnProperty(0)===true))
+    if(((Object.prototype.hasOwnProperty.call(records, 0))===true))
     {
       unique_school= records[0].map((record)=>{
         return record.school;
@@ -65,24 +66,24 @@ export default function Dashboard() {
     
     <div className='container'>
 
-      <label>Select Country </label>
-      <select placeholder='Select' onChange={(e) => dispatch(setSelectedCountry(e.target.value))}>
+      <label htmlFor="countySelect">Select Country </label>
+      <select id="countySelect" placeholder='Select' onChange={(e) => dispatch(setSelectedCountry(e.target.value))}>
         <option value={"Select"} hidden >Select</option>
         { getUniqueCountry().map((country,key)=>
           <option key= {key}  value={country}>{country}</option>
         )}
       </select>  
 
-      <label>Select Camp </label>
-      <select  placeholder='select' onChange={(e) =>dispatch(setSelectedCamp(e.target.value))}>
+      <label htmlFor="campSelect">Select Camp </label>
+      <select id="campSelect" placeholder='select' onChange={(e) =>dispatch(setSelectedCamp(e.target.value))}>
         <option value={"Select"} hidden >Select</option>
         { getUniqueCamp().map((camp, key)=>
           <option key= {key} value={camp}>{camp}</option>
         )}
       </select> 
 
-      <label>Select School </label>
-      <select   onChange={(e) =>dispatch(setSelectedSchool(e.target.value))}>
+      <label htmlFor="schoolSelect">Select School </label>
+      <select  id="schoolSelect" onChange={(e) =>dispatch(setSelectedSchool(e.target.value))}>
         <option value={"Select"} hidden >Select</option>
         <option value={"Show_All"} >Show All</option>
         { getUniqueSchool().map((school,key)=>

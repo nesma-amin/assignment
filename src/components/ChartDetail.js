@@ -17,34 +17,34 @@ export default function ChartDetail() {
         <tbody onChange={(event) =>this.setInputState(event)} style={{border:"solid", width:"200px"}}>
           <tr>
             <td>
-              <label>Camp Name:</label>
+              <label htmlFor="camp">Camp Name:</label>
             </td>
             <td>
-              <label>{camp[0]}</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>Country Name:</label>
-            </td>
-            <td>
-              <label>{country[0]}</label>
+              <label id="camp">{camp[0]}</label>
             </td>
           </tr>
           <tr>
             <td>
-              <label>School Name:</label>
+              <label htmlFor="country">Country Name:</label>
             </td>
             <td>
-              <label>{schoolName}</label>
+              <label id="country">{country[0]}</label>
             </td>
           </tr>
           <tr>
             <td>
-              <label>Num of Lessons:</label>
+              <label htmlFor="school">School Name:</label>
             </td>
             <td>
-              <label>{lessonsNum}</label>
+              <label id="school">{schoolName}</label>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label htmlFor="lessons">Num of Lessons:</label>
+            </td>
+            <td>
+              <label id="lessons">{lessonsNum}</label>
             </td>
           </tr>
         </tbody>
