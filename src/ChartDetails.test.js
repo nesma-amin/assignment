@@ -1,11 +1,26 @@
 import React from "react";
-import { render, screen } from "../test-utils";
 import  Dashboard  from "./components/Dashboard";
+import Enzyme, { shallow } from "enzyme";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 
-describe("Home Pages", () => {
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  useSelector: jest.fn().mockReturnValue({
+    // useSelector will return redux state object
+    repositories: {
+      loading: false,
+      repos: [],
+    },
+  }),
+  useDispatch: () => mockDispatch,
+}));
+Enzyme.configure({ adapter: new Adapter() });
+
+describe("Home Pages ", () => {
   test("Should be render", () => {
-    render(<Dashboard />);
-    const getAText = screen.getByTestId("welcome");
-    expect(getAText).toBeInTheDocument();
-  });
+    // const chartDetailInstance = shallow(<Dashboard />);
+    // const element = chartDetailInstance.find("div label");
+    expect(Dashboard).toBeDefined();
+    // expect(element.text()).toBe("Select Country:");
+    });
 });
