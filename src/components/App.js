@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 import { Switch, Route } from "react-router-loading";
 import{BrowserRouter as Router} from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import {  useDispatch } from 'react-redux'
 import {receiveRecords} from '../actions/records'
-import { useState, useEffect,useRef } from 'react';
+import { useEffect} from 'react';
 
 // import LoadingBar from 'react-redux-loading'
 import Nav from './Nav'
@@ -20,16 +20,8 @@ export default function App () {
 
   const dispatch = useDispatch();
 
-  const [ test, setTest ] = useState(false);
-const fetchData=(()=>{
-  fetch('data.json'
-  ,{
-    headers : { 
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-     }
-  }
-  )
+  const fetchData=(()=>{
+
   // fetch('http://localhost:8080/https://raw.githubusercontent.com/abdelrhman-arnos/analysis-fe-challenge/master/data.json'
   // ,{
   //   headers : { 
@@ -38,6 +30,14 @@ const fetchData=(()=>{
   //    }
   // }
   // )
+    fetch('data.json'
+    ,{
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }
+    )
     .then(function(response){
       console.log(response)
       return response.json();
@@ -57,7 +57,7 @@ const fetchData=(()=>{
 
     }, 1000)
 
-    },[])
+    })
     console.log("records in app");
 
     return (
@@ -68,12 +68,9 @@ const fetchData=(()=>{
           <Switch>  
                     
           <Fragment> 
-
           <Route path='/' exact component={Dashboard} />
           <Route exact path='/chartDetails/:lessonsNum/:schoolName' component={ChartDetail} />
-          {/* <Route path='/chartDetails' component={()=> <ChartDetail record={}/>} /> */}
-
-            </Fragment>
+          </Fragment>
                 
           </Switch> 
           </div>

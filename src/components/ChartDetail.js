@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 
-
-
 export default function ChartDetail() {
-    const { camp, country } = useSelector(state => ({
-      camp: state.camp,
-      country: state.country,
+  const { camp, country } = useSelector(state => ({
+    camp: state.camp,
+    country: state.country,
   }))
-const {schoolName} = useParams()
-const { lessonsNum } = useParams();
-    console.log("lessonsNum",lessonsNum)
+  const {schoolName} = useParams()
+  const { lessonsNum } = useParams();
+  console.log("lessonsNum",lessonsNum)
   return (
     <div className='camp' >
       <table id="entry_data" style={{border:"solid", width:"200px"}}>
@@ -51,25 +49,7 @@ const { lessonsNum } = useParams();
               </tr>
           </tbody>
       </table>
-   </div>
-
-    /* <form style={{border:"solid", width:"200px"}}>
-        <p>{`${totalLessons} lessons in ${camp[0]}`}</p>
-    { schools.map((school, index)=>
-     <div >
-        <input type="checkbox"
-        // value={`${lessonsNum[index]} lessons in ${school}`}
-        value={school}
-        name='lessonsPerSchools' 
-        onChange={(e) =>setSelectedSchool(e.target.value)}
-        />   
-        <label>{`${lessonsNum[index]} lessons in ${school}`}</label> */
-//     )}
-
-   
-// <p>{selectedSchool}</p>
-// </form>
-//     </dev>
+   </div>   
   )
 } 
 
