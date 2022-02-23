@@ -1,17 +1,17 @@
-import {SET_SELECTED_SCHOOL,UNSET_SELECTED_SCHOOL} from '../actions/school'
+import {SET_SELECTED_SCHOOL,UNSET_SELECTED_SCHOOL} from "../actions/school";
 
 export default function school(state=null, action){
-    switch(action.type){
-        case SET_SELECTED_SCHOOL:
-            const school=[action.school]
-            return{
-                ...school
-            }
-            case UNSET_SELECTED_SCHOOL:
+  switch(action.type){
+  case SET_SELECTED_SCHOOL:
+  {const school=[action.school];
+    return{
+      ...school
+    };}
+  case UNSET_SELECTED_SCHOOL:
 
-                return null
+  { return null;}
                 
-        default:
-            return state
-    }
+  default:
+    return state;
+  }
 }

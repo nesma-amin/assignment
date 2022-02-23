@@ -9,23 +9,33 @@
     "body-parser": "^1.19.1",
     "chart.js": "^3.7.1",
     "cors": "^2.8.5",
-    "cors-anywhere": "^0.4.4",
     "express": "^4.17.2",
+    "history": "^4.10.1",
+    "middleware": "^1.0.0",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",
     "react-chartjs-2": "^4.0.1",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-redux": "^7.2.6",
+    "react-redux-loading-bar": "^5.0.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-router-loading": "^0.4.0",
     "react-scripts": "5.0.0",
+    "react-top-loading-bar": "^2.1.0",
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.1",
+    "styled-components": "^5.3.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint \"src/**/*.{js,jsx}\"",
+    "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +54,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cors-anywhere": "^0.4.4",
+    "eslint": "^8.9.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0"
   }
 }
